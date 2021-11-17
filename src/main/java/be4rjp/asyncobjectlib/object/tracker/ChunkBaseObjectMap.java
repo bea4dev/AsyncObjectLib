@@ -21,14 +21,17 @@ public class ChunkBaseObjectMap {
 
     private final Set<AsyncObject> removeObjectsIfNotMove = ConcurrentHashMap.newKeySet();
 
-    private final Set<AsyncObject> trackedObject = new HashSet<>();
+    private final Set<AsyncObject> trackedObjects = new HashSet<>();
 
-    private final Set<AsyncObject> hideObject = new HashSet<>();
+    private final Set<AsyncObject> hideObjects = new HashSet<>();
 
     private final AsyncObjectPlayer asyncObjectPlayer;
+    
+    private final ObjectTracker objectTracker;
 
-    public ChunkBaseObjectMap(AsyncObjectPlayer asyncObjectPlayer){
+    public ChunkBaseObjectMap(AsyncObjectPlayer asyncObjectPlayer, ObjectTracker objectTracker){
         this.asyncObjectPlayer = asyncObjectPlayer;
+        this.objectTracker = objectTracker;
     }
 
     public void addAsyncObject(AsyncObject asyncObject){this.addObjects.add(asyncObject);}
@@ -41,33 +44,35 @@ public class ChunkBaseObjectMap {
     private int tick = 0;
 
     public void doTick(){
+        
+        if(asyncObjectPlayer.getPlayer().getWorld() != objectTracker.getWorld()) return;
 
         tick++;
 
         //AsyncObjectの追加
         for (AsyncObject asyncObject : addObjects) {
             Vector position = asyncObject.getPosition();
-            long coord = ChunkUtil.toLongFromObjectPosition(position);
+            long coordinate = ChunkUtil.toLongFromObjectPosition(position);
 
-            asyncObjectMap.computeIfAbsent(coord, k -> new HashSet<>()).add(asyncObject);
+            asyncObjectMap.computeIfAbsent(coordinate, k -> new HashSet<>()).add(asyncObject);
         }
         addObjects.clear();
 
         //AsyncObjectの削除
         for (AsyncObject asyncObject : removeObjects) {
-            trackedObject.remove(asyncObject);
-            hideObject.remove(asyncObject);
+            trackedObjects.remove(asyncObject);
+            hideObjects.remove(asyncObject);
             for (Set<AsyncObject> asyncObjects : asyncObjectMap.values()) {
                 asyncObjects.remove(asyncObject);
             }
         }
         removeObjects.clear();
         for(AsyncObject asyncObject : removeObjectsIfNotMove){
-            trackedObject.remove(asyncObject);
-            hideObject.remove(asyncObject);
+            trackedObjects.remove(asyncObject);
+            hideObjects.remove(asyncObject);
 
-            long coord = ChunkUtil.toLongFromObjectPosition(asyncObject.getPosition());
-            Set<AsyncObject> asyncObjects = asyncObjectMap.get(coord);
+            long coordinate = ChunkUtil.toLongFromObjectPosition(asyncObject.getPosition());
+            Set<AsyncObject> asyncObjects = asyncObjectMap.get(coordinate);
             if(asyncObjects != null) asyncObjects.remove(asyncObject);
         }
 
@@ -80,29 +85,31 @@ public class ChunkBaseObjectMap {
 
                 if(asyncObjects != null) {
                     for (AsyncObject asyncObject : asyncObjects) {
-                        trackedObject.add(asyncObject);
-                        hideObject.remove(asyncObject);
-                        asyncObject.onSpawn();
+                        if(!trackedObjects.contains(asyncObject)) {
+                            trackedObjects.add(asyncObject);
+                            hideObjects.remove(asyncObject);
+                            asyncObject.onSpawn();
+                        }
                     }
                 }
             }
 
             //デスポーン処理
-            for (AsyncObject asyncObject : trackedObject) {
-                long coord = ChunkUtil.toLongFromObjectPosition(asyncObject.getPosition());
-                if (!rangeChunks.contains(coord)) {
-                    if (!asyncObject.shouldDoTickAfterRemoved()) {
-                        hideObject.add(asyncObject);
+            for (AsyncObject asyncObject : trackedObjects) {
+                long coordinate = ChunkUtil.toLongFromObjectPosition(asyncObject.getPosition());
+                if (!rangeChunks.contains(coordinate)) {
+                    if (asyncObject.shouldDoTickAfterRemoved()) {
+                        hideObjects.add(asyncObject);
                     }
-                    trackedObject.remove(asyncObject);
+                    trackedObjects.remove(asyncObject);
                     asyncObject.onRemove();
                 }
             }
         }
 
         //AsyncObjectのtick実行
-        trackedObject.forEach(AsyncObject::tick);
-        hideObject.forEach(AsyncObject::tick);
+        trackedObjects.forEach(AsyncObject::tick);
+        hideObjects.forEach(AsyncObject::tick);
     }
 
     private Set<Long> getRangeChunks(){
@@ -116,5 +123,14 @@ public class ChunkBaseObjectMap {
         }
 
         return chunkPositions;
+    }
+    
+    
+    public void unloadAll(){
+        trackedObjects.forEach(AsyncObject::onRemove);
+        trackedObjects.clear();
+        
+        hideObjects.forEach(AsyncObject::onRemove);
+        hideObjects.clear();
     }
 }

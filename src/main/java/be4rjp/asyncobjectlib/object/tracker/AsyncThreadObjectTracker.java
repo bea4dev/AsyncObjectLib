@@ -8,10 +8,12 @@ public class AsyncThreadObjectTracker extends BukkitRunnable {
     private final ObjectTracker objectTracker;
 
     private final ChunkBaseObjectMap chunkBaseObjectMap;
+    
+    private boolean isUnloaded = false;
 
     public AsyncThreadObjectTracker(ObjectTracker objectTracker){
         this.objectTracker = objectTracker;
-        this.chunkBaseObjectMap = new ChunkBaseObjectMap(objectTracker.getAsyncObjectPlayer());
+        this.chunkBaseObjectMap = new ChunkBaseObjectMap(objectTracker.getAsyncObjectPlayer(), objectTracker);
     }
 
     public ObjectTracker getObjectTracker() {return objectTracker;}
@@ -24,6 +26,19 @@ public class AsyncThreadObjectTracker extends BukkitRunnable {
             cancel();
             return;
         }
+    
+        if(objectTracker.getAsyncObjectPlayer().getPlayer().getWorld() != objectTracker.getWorld() && !isUnloaded){
+            isUnloaded = true;
+            chunkBaseObjectMap.unloadAll();
+            return;
+        }
+    
+        if(objectTracker.getAsyncObjectPlayer().getPlayer().getWorld() == objectTracker.getWorld() && isUnloaded){
+            isUnloaded = false;
+        }
+    
+        if(isUnloaded) return;
+        
         chunkBaseObjectMap.doTick();
     }
 

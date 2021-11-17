@@ -9,11 +9,13 @@ public class WorldThreadObjectTracker extends WorldThreadRunnable {
     private final ObjectTracker objectTracker;
 
     private final ChunkBaseObjectMap chunkBaseObjectMap;
+    
+    private boolean isUnloaded = false;
 
     public WorldThreadObjectTracker(World world, ObjectTracker objectTracker){
         super(world);
         this.objectTracker = objectTracker;
-        this.chunkBaseObjectMap = new ChunkBaseObjectMap(objectTracker.getAsyncObjectPlayer());
+        this.chunkBaseObjectMap = new ChunkBaseObjectMap(objectTracker.getAsyncObjectPlayer(), objectTracker);
     }
 
     public ObjectTracker getObjectTracker() {return objectTracker;}
@@ -26,6 +28,19 @@ public class WorldThreadObjectTracker extends WorldThreadRunnable {
             cancel();
             return;
         }
+    
+        if(objectTracker.getAsyncObjectPlayer().getPlayer().getWorld() != objectTracker.getWorld() && !isUnloaded){
+            isUnloaded = true;
+            chunkBaseObjectMap.unloadAll();
+            return;
+        }
+        
+        if(objectTracker.getAsyncObjectPlayer().getPlayer().getWorld() == objectTracker.getWorld() && isUnloaded){
+            isUnloaded = false;
+        }
+        
+        if(isUnloaded) return;
+        
         chunkBaseObjectMap.doTick();
     }
 

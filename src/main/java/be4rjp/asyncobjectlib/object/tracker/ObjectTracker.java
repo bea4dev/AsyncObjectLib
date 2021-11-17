@@ -23,7 +23,9 @@ public class ObjectTracker {
     }
 
     public AsyncObjectPlayer getAsyncObjectPlayer() {return asyncObjectPlayer;}
-
+    
+    public World getWorld() {return world;}
+    
     public synchronized void addAsyncObject(AsyncObject asyncObject){
         switch (asyncObject.getTickType()){
             case ASYNC_THREAD:{
@@ -54,4 +56,16 @@ public class ObjectTracker {
             }
         }
     }
+    
+    public AsyncThreadObjectTracker getAsyncThreadObjectTracker() {return asyncThreadObjectTracker;}
+    
+    public MainThreadObjectTracker getMainThreadObjectTracker() {return mainThreadObjectTracker;}
+    
+    public WorldThreadObjectTracker getWorldThreadObjectTracker() {return worldThreadObjectTracker;}
+    
+    public void setAsyncThreadObjectTracker(AsyncThreadObjectTracker asyncThreadObjectTracker) {this.asyncThreadObjectTracker = asyncThreadObjectTracker;}
+    
+    public void setMainThreadObjectTracker(MainThreadObjectTracker mainThreadObjectTracker) {this.mainThreadObjectTracker = mainThreadObjectTracker;}
+    
+    public void setWorldThreadObjectTracker(WorldThreadObjectTracker worldThreadObjectTracker) {this.worldThreadObjectTracker = worldThreadObjectTracker;}
 }
