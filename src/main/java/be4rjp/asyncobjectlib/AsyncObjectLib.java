@@ -1,7 +1,6 @@
 package be4rjp.asyncobjectlib;
 
 import be4rjp.asyncobjectlib.listener.PlayerJoinQuitListener;
-import be4rjp.asyncobjectlib.listener.TestListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,7 +16,6 @@ public final class AsyncObjectLib extends JavaPlugin {
 
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new PlayerJoinQuitListener(), this);
-        pluginManager.registerEvents(new TestListener(), this);
     }
 
     @Override
