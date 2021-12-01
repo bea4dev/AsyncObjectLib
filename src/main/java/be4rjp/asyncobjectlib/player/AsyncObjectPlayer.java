@@ -38,9 +38,8 @@ public class AsyncObjectPlayer {
 
     private final Map<World, ObjectTracker> objectTrackerMap = new ConcurrentHashMap<>();
 
-    public AsyncObjectPlayer(Player player){
-        this.player = player;
-    }
+    
+    public AsyncObjectPlayer(Player player){this.player = player;}
 
     public Player getPlayer() {return player;}
 
@@ -51,6 +50,8 @@ public class AsyncObjectPlayer {
     public int getObjectDistanceCheckInterval() {return objectDistanceCheckInterval;}
 
     public void setObjectDistanceCheckInterval(int objectDistanceCheckInterval) {this.objectDistanceCheckInterval = objectDistanceCheckInterval;}
+    
+    public ObjectTracker getObjectTracker(World world){return this.objectTrackerMap.get(world);}
 
 
     /**

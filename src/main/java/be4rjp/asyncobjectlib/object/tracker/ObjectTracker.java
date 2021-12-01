@@ -4,6 +4,9 @@ import be4rjp.asyncobjectlib.object.AsyncObject;
 import be4rjp.asyncobjectlib.player.AsyncObjectPlayer;
 import org.bukkit.World;
 
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 public class ObjectTracker {
 
     private final AsyncObjectPlayer asyncObjectPlayer;
@@ -15,6 +18,8 @@ public class ObjectTracker {
     private AsyncThreadObjectTracker asyncThreadObjectTracker;
 
     private WorldThreadObjectTracker worldThreadObjectTracker;
+    
+    private final Set<AsyncObject> asyncObjects = ConcurrentHashMap.newKeySet();
 
 
     public ObjectTracker(AsyncObjectPlayer asyncObjectPlayer, World world){
@@ -26,7 +31,12 @@ public class ObjectTracker {
     
     public World getWorld() {return world;}
     
+    public Set<AsyncObject> getAsyncObjects() {return asyncObjects;}
+    
     public synchronized void addAsyncObject(AsyncObject asyncObject){
+        
+        asyncObjects.add(asyncObject);
+        
         switch (asyncObject.getTickType()){
             case ASYNC_THREAD:{
                 if(asyncThreadObjectTracker == null){

@@ -6,7 +6,7 @@
 
     <groupId>be4rjp</groupId>
     <artifactId>asyncobjectlib</artifactId>
-    <version>v1.0.0</version>
+    <version>v1.0.1</version>
     <packaging>jar</packaging>
 
     <name>AsyncObjectLib</name>
@@ -65,6 +65,11 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>minecraft-libraries</id>
+            <name>Minecraft Libraries</name>
+            <url>https://libraries.minecraft.net</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -84,6 +89,18 @@
             <artifactId>ChiyogamiLib</artifactId>
             <version>f5e45239d5</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.59.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mojang</groupId>
+            <artifactId>datafixerupper</artifactId>
+            <version>1.0.20</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -1,5 +1,6 @@
 package be4rjp.asyncobjectlib.object;
 
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 public interface AsyncObject {
@@ -34,5 +35,17 @@ public interface AsyncObject {
      * @return 削除された後もtick実行を行うかどうか
      */
     boolean shouldDoTickAfterRemoved();
+    
+    /**
+     * ヒットボックスを取得
+     * nullを返すと当たり判定を実行しません
+     * @return BoundingBox
+     */
+    BoundingBox getBoundingBox();
+    
+    /**
+     * クリックしたときに呼び出されるメソッド
+     */
+    void onClick();
 
 }
