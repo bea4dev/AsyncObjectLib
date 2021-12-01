@@ -6,7 +6,7 @@
 
     <groupId>be4rjp</groupId>
     <artifactId>asyncobjectlib</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>v1.0.0</version>
     <packaging>jar</packaging>
 
     <name>AsyncObjectLib</name>
