@@ -47,5 +47,11 @@ public interface AsyncObject {
      * クリックしたときに呼び出されるメソッド
      */
     void onClick();
+    
+    /**
+     * 削除すべきかどうか
+     * trueを返すと完全に削除される
+     */
+    boolean isDead();
 
 }

@@ -110,6 +110,10 @@ public class ChunkBaseObjectMap {
         //AsyncObjectのtick実行
         trackedObjects.forEach(AsyncObject::tick);
         hideObjects.forEach(AsyncObject::tick);
+        
+        //isRemove()がtrueになっているObjectを完全に削除
+        trackedObjects.removeIf(AsyncObject::isDead);
+        hideObjects.removeIf(AsyncObject::isDead);
     }
 
     private Set<Long> getRangeChunks(){
