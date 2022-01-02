@@ -3,11 +3,13 @@ package be4rjp.asyncobjectlib.object.tracker;
 import be4rjp.asyncobjectlib.object.AsyncObject;
 import be4rjp.asyncobjectlib.player.AsyncObjectPlayer;
 import be4rjp.asyncobjectlib.util.ChunkUtil;
+import it.unimi.dsi.fastutil.ints.Int2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,7 +23,7 @@ public class ChunkBaseObjectMap {
 
     private final Set<AsyncObject> removeObjectsIfNotMove = ConcurrentHashMap.newKeySet();
 
-    private final Set<AsyncObject> trackedObjects = new HashSet<>();
+    private final Set<AsyncObject> trackedObjects = ConcurrentHashMap.newKeySet();
 
     private final Set<AsyncObject> hideObjects = new HashSet<>();
 
@@ -114,6 +116,10 @@ public class ChunkBaseObjectMap {
         //isRemove()がtrueになっているObjectを完全に削除
         trackedObjects.removeIf(AsyncObject::isDead);
         hideObjects.removeIf(AsyncObject::isDead);
+        
+        for(Set<AsyncObject> asyncObjects : asyncObjectMap.values()){
+            asyncObjects.removeIf(AsyncObject::isDead);
+        }
     }
 
     private Set<Long> getRangeChunks(){

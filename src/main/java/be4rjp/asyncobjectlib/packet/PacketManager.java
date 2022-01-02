@@ -35,7 +35,7 @@ public class PacketManager {
         Vector direction = player.getEyeLocation().getDirection();
         
         RayTrace rayTrace = new RayTrace(startPosition, direction);
-        List<Vector> positions = rayTrace.traverse(3.0, 0.1);
+        List<Vector> positions = rayTrace.traverse(4.0, 0.1);
         for(Vector position : positions){
             for(AsyncObject asyncObject : objectTracker.getAsyncObjects()){
                 BoundingBox boundingBox = asyncObject.getBoundingBox();
