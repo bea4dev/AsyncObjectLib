@@ -1,4 +1,4 @@
 name: AsyncObjectLib
 version: ${project.version}
 main: be4rjp.asyncobjectlib.AsyncObjectLib
-api-version: 1.15
+api-version: 1.21.1

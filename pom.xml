@@ -12,7 +12,7 @@
     <name>AsyncObjectLib</name>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -54,8 +54,8 @@
 
     <repositories>
         <repository>
-            <id>papermc-repo</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
         <repository>
             <id>sonatype</id>
@@ -74,9 +74,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
+            <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <version>1.21.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -85,9 +85,9 @@
             <version>8.1.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.Be4rJP</groupId>
+            <groupId>com.github.bea4dev</groupId>
             <artifactId>ChiyogamiLib</artifactId>
-            <version>f5e45239d5</version>
+            <version>7ed1df4960</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
